@@ -12,7 +12,63 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-model Users{
-  id Int @id @default(autoincrement())
-  email String @unique
+
+model User {
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
+  userName     String
+  passWord     String
+  name         String
+  phoen        String
+  address      String
+  roleId       Int
+  packageId    Int? 
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  role         Role           @relation(fields: [roleId], references: [id])
+  Package      Package?       @relation(fields: [packageId], references: [id])
+  UserLaundary UserLaundary[]
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      RoleName
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User[]
+}
+
+model Package {
+  id               Int      @id @default(autoincrement())
+  name             String
+  description      String
+  price            Float
+  numberOfLanudary Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  User             User[]
+}
+
+model UserLaundary {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  laundryId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id])
+  Laundry   Laundry  @relation(fields: [laundryId], references: [id])
+}
+
+model Laundry {
+  id           Int            @id @default(autoincrement())
+  name         String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  UserLaundary UserLaundary[]
+}
+
+enum RoleName {
+  ADMIN
+  USPER_ADMIN
+  EMPLOY
 }

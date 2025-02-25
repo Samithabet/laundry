@@ -1,6 +1,6 @@
 import express from 'express';
+
 const rootRoutr=express.Router();
-
-
-rootRoutr.use('/user',)
+import authRoutr from './authRoute';
+rootRoutr.use('/auth',authRoutr)
 export default rootRoutr
