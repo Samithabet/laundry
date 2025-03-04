@@ -55,10 +55,6 @@ export const lanudryWithownerValidations = [
     .notEmpty().withMessage('العنوان مطلوب') // Address is required
   .isString().withMessage('يجب أن يكون العنوان نصًا'),
 
-  // Role ID validation
-  body('roleId')
-    .notEmpty().withMessage('معرف الدور مطلوب') // Role ID is required
-    .isInt().withMessage('يجب أن يكون معرف الدور رقمًا صحيحًا'), // Role ID must be an integer
 
   // Package ID validation (optional)
   body('packageId')

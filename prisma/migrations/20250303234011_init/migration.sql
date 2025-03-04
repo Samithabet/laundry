@@ -14,6 +14,7 @@ CREATE TABLE "User" (
     "phoen" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "roleId" INTEGER NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "packageId" INTEGER,
     "laundryId" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -28,6 +29,7 @@ CREATE TABLE "Role" (
     "name" "RoleName" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
 );
@@ -52,6 +54,7 @@ CREATE TABLE "Laundry" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "ownerId" INTEGER NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Laundry_pkey" PRIMARY KEY ("id")
 );
@@ -61,6 +64,7 @@ CREATE TABLE "Clothes" (
     "id" SERIAL NOT NULL,
     "laundryId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -72,6 +76,7 @@ CREATE TABLE "Service" (
     "id" SERIAL NOT NULL,
     "clothesId" INTEGER NOT NULL,
     "serviceTypeId" INTEGER NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "cost" DOUBLE PRECISION NOT NULL,
@@ -84,6 +89,7 @@ CREATE TABLE "ServiceType" (
     "id" SERIAL NOT NULL,
     "laundryId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -97,6 +103,7 @@ CREATE TABLE "Customer" (
     "customerCode" TEXT NOT NULL,
     "phoen" TEXT NOT NULL,
     "laundryId" INTEGER NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -107,6 +114,7 @@ CREATE TABLE "Customer" (
 CREATE TABLE "Scot" (
     "id" SERIAL NOT NULL,
     "scot" DOUBLE PRECISION NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -119,6 +127,7 @@ CREATE TABLE "Bills" (
     "customerId" INTEGER NOT NULL,
     "washingId" INTEGER NOT NULL,
     "total" DOUBLE PRECISION NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -132,6 +141,7 @@ CREATE TABLE "Washing" (
     "status" "WashingStatus" NOT NULL,
     "totalWithoutTax" DOUBLE PRECISION NOT NULL,
     "totalIncludingTax" DOUBLE PRECISION NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -143,6 +153,7 @@ CREATE TABLE "WashingService" (
     "id" SERIAL NOT NULL,
     "serviceId" INTEGER NOT NULL,
     "washingId" INTEGER NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "WashingService_pkey" PRIMARY KEY ("id")
 );

@@ -16,12 +16,13 @@ datasource db {
 model User {
   id           Int       @id @default(autoincrement())
   email        String    @unique
-  userName     String @unique
+  userName     String    @unique
   passWord     String
   name         String
   phoen        String
   address      String
   roleId       Int
+  isDeleted    Boolean   @default(false)
   packageId    Int?
   laundryId    Int?
   createdAt    DateTime  @default(now())
@@ -37,6 +38,7 @@ model Role {
   name      RoleName
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false)
   User      User[]
 }
 
@@ -52,21 +54,22 @@ model Package {
 }
 
 model Laundry {
-  id        Int      @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   ownerId   Int
-
-  Customer Customer[]
-  owner    User       @relation("owner", fields: [ownerId], references: [id])
-  User     User[]     @relation("employ")
+  isDeleted Boolean    @default(false)
+  Customer  Customer[]
+  owner     User       @relation("owner", fields: [ownerId], references: [id])
+  User      User[]     @relation("employ")
 }
 
 model Clothes {
   id        Int       @id @default(autoincrement())
   laundryId Int
   name      String
+  isDeleted Boolean   @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Service   Service[]
@@ -76,6 +79,7 @@ model Service {
   id             Int              @id @default(autoincrement())
   clothesId      Int
   serviceTypeId  Int
+  isDeleted      Boolean          @default(false)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   clothes        Clothes          @relation(fields: [clothesId], references: [id])
@@ -88,6 +92,7 @@ model ServiceType {
   id        Int       @id @default(autoincrement())
   laundryId Int
   name      String
+  isDeleted Boolean   @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Service   Service[]
@@ -99,6 +104,7 @@ model Customer {
   customerCode String
   phoen        String
   laundryId    Int
+  isDeleted    Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   laundry      Laundry  @relation(fields: [laundryId], references: [id])
@@ -108,6 +114,7 @@ model Customer {
 model Scot {
   id        Int      @id @default(autoincrement())
   scot      Float
+  isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -117,6 +124,7 @@ model Bills {
   customerId Int
   washingId  Int      @unique
   total      Float
+  isDeleted  Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   customer   Customer @relation(fields: [customerId], references: [id])
@@ -129,6 +137,7 @@ model Washing {
   status            WashingStatus
   totalWithoutTax   Float
   totalIncludingTax Float
+  isDeleted         Boolean          @default(false)
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
   Bills             Bills?
@@ -139,6 +148,7 @@ model WashingService {
   id        Int     @id @default(autoincrement())
   serviceId Int
   washingId Int
+  isDeleted Boolean @default(false)
   service   Service @relation(fields: [serviceId], references: [id])
   washing   Washing @relation(fields: [washingId], references: [id])
 }

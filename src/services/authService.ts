@@ -64,7 +64,7 @@ import { UserToken } from "../types/userToken";
   }
   public async Login(userName: string, password: string): Promise<{ user: string; token: string }> {
     try {
-      const user = await prisma.user.findFirst({ where: { userName: userName } });
+      const user = await prisma.user.findFirst({ where: { userName: userName,isDeleted:false } });
       if (!user) {
         throw new NotFound("اسم المستخدم غير موجود");
       }
