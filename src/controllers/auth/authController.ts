@@ -1,4 +1,4 @@
-import authService from "../services/authService";
+import authService from "../../services/auth/authService";
 import { Request, Response, NextFunction } from 'express'
 import { validationResult } from "express-validator";
 import { BadRequest } from "http-errors";

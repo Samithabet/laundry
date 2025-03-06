@@ -3,3 +3,4 @@ export  enum RoleName {
     USPER_ADMIN='USPER_ADMIN',
     EMPLOY='EMPLOY'
   }
+  

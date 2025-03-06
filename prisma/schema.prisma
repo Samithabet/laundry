@@ -63,6 +63,7 @@ model Laundry {
   Customer  Customer[]
   owner     User       @relation("owner", fields: [ownerId], references: [id])
   User      User[]     @relation("employ")
+  Order Order[]
 }
 
 model Clothes {
@@ -111,7 +112,7 @@ model Customer {
   Bills        Bills[]
 }
 
-model Scot {
+model Tax {
   id        Int      @id @default(autoincrement())
   scot      Float
   isDeleted Boolean  @default(false)
@@ -151,6 +152,21 @@ model WashingService {
   isDeleted Boolean @default(false)
   service   Service @relation(fields: [serviceId], references: [id])
   washing   Washing @relation(fields: [washingId], references: [id])
+}
+model Order {
+  id          Int      @id @default(autoincrement())
+  problemName String   
+  lanudryId Int
+  state Int
+  orderStatus OrderStatus 
+  laundry Laundry @relation(fields: [lanudryId],references: [id])
+}
+
+enum OrderStatus {
+  PENDING    // قيد الانتظار
+  IN_PROGRESS // قيد التنفيذ
+  COMPLETED  // مكتمل
+  CANCELLED  // ملغى
 }
 
 enum WashingStatus {

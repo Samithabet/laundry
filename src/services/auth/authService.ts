@@ -1,8 +1,8 @@
 import { User } from "@prisma/client";
 import { HttpError, Conflict,NotFound,BadRequest,InternalServerError } from "http-errors";
-import { comparePassword, generateToken, generateTokenForLaundry, hashPassword } from "../conf/generateToken";
-import prisma from "../conf/db";
-import { UserToken } from "../types/userToken";
+import { comparePassword, generateToken, generateTokenForLaundry, hashPassword } from "../../conf/generateToken";
+import prisma from "../../conf/db";
+import { UserToken } from "../../types/userToken";
  class AuthService {
   public async Register(userLogin:UserToken,Data:User): Promise<any | undefined> {
     // Implement user registration logic
