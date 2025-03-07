@@ -2,7 +2,23 @@ const { body } = require('express-validator');
 import { BadRequest } from "http-errors";
 import prisma from "../../conf/db";
 
-
+const allowedFields = ['laundryId', 'name', 'isDeleted'];
+const checkForExtraFields = (req: any, res: any, next: any) => {
+    const bodyFields = Object.keys(req.body);
+  
+    // Check if any field in the body is not in the allowedFields list
+    const extraFields = bodyFields.filter(field => !allowedFields.includes(field));
+  
+    if (extraFields.length > 0) {
+      return res.status(400).json({
+        message: `الحقول غير مسموح بها: ${extraFields.join(', ')}`,
+      });
+    }
+  
+    // If there are validation errors, return them
+  
+    next();
+  };
 
 export const createClothesValidations = [
   
@@ -26,6 +42,7 @@ export const createClothesValidations = [
         throw new BadRequest('اسم نوع القطعة مستخدم بالفعل'); 
       }
     }),
+    checkForExtraFields
 
 
 ];
@@ -52,7 +69,7 @@ export const updateClothesValidations = [
         }
       }),
   
-  
+  checkForExtraFields
   ];
 
 

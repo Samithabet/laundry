@@ -14,7 +14,7 @@ class GenericService<T> {
     
 
     public async getAll(filterData: any): Promise<PaginatedResponse<T>|T[]> {
-        // try {
+        try {
             const { page, pageSize } = filterData;
             delete filterData.page;
             delete filterData.pageSize;
@@ -44,10 +44,11 @@ class GenericService<T> {
             return await this.model.findMany({
               where: filterData,
             });
-        // } catch (error) {
+        } catch (error) {
+          throw new InternalServerError("خطاء في الخادم");
             
-        // }
-        // return this.model.findMany();
+        }
+      
     }
 
     public async getById(id: number): Promise<T | null> {

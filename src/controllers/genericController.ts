@@ -42,6 +42,7 @@ class GenericController<T> {
         try {
 
             const data = req.body; // Extract data from request body
+            console.log("🚀 ~ GenericController<T> ~ create ~ data:", data)
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 throw new BadRequest(errors.array()[0].msg);

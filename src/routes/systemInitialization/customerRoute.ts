@@ -6,14 +6,14 @@ import isAuthenticated from '../../middlewares/isAuthenticated';
 import { hasPermission } from '../../middlewares/hasPermission';
 import{RoleName} from '../../enum/role'
 import prisma from '../../conf/db';
-const clothesRoutr=express.Router();
-const clothesService=new genericService(prisma.customer)
-const clothesController=new genericController(clothesService)
+const customerRoute=express.Router();
+const customerService=new genericService(prisma.customer)
+const customerController=new genericController(customerService)
 
-clothesRoutr.get('/',isAuthenticated,hasPermission([RoleName.ADMIN]),(clothesController.getAll.bind(clothesController)))
-clothesRoutr.get('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),clothesController.getById.bind(clothesController))
-clothesRoutr.post('/',isAuthenticated,hasPermission([RoleName.ADMIN]),createCustomerValidations,clothesController.create.bind(clothesController))
-clothesRoutr.patch('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),updateCustomerValidations,clothesController.update.bind(clothesController))
-clothesRoutr.delete('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),clothesController.delete.bind(clothesController))
+customerRoute.get('/',isAuthenticated,hasPermission([RoleName.ADMIN]),(customerController.getAll.bind(customerController)))
+customerRoute.get('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),customerController.getById.bind(customerController))
+customerRoute.post('/',isAuthenticated,hasPermission([RoleName.ADMIN]),createCustomerValidations,customerController.create.bind(customerController))
+customerRoute.patch('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),updateCustomerValidations,customerController.update.bind(customerController))
+customerRoute.delete('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),customerController.delete.bind(customerController))
 
-export default clothesRoutr
+export default customerRoute

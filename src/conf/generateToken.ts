@@ -11,10 +11,7 @@ export const generateToken = (user: any): string => {
     ; // Ensure JWT_SECRET is in .env file
     return jwt.sign({ email: user.email }, JWT_SECRET!, { expiresIn: '7d' });
   };
-  export const generateTokenForLaundry = (user: any): string => {  
-    ; // Ensure JWT_SECRET is in .env file
-    return jwt.sign({ laundryId: user.laundryId }, JWT_SECRET!, { expiresIn: '7d' });
-  };
+
 export async function hashPassword(password: string):Promise<string> {
     try{
        

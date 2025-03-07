@@ -23,12 +23,10 @@ model User {
   address      String
   roleId       Int
   isDeleted    Boolean   @default(false)
-  packageId    Int?
   laundryId    Int?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   role         Role      @relation(fields: [roleId], references: [id])
-  Package      Package?  @relation(fields: [packageId], references: [id])
   laundry      Laundry?  @relation("employ", fields: [laundryId], references: [id])
   ownerlaundry Laundry[] @relation("owner")
 }
@@ -41,18 +39,6 @@ model Role {
   isDeleted Boolean  @default(false)
   User      User[]
 }
-
-model Package {
-  id               Int      @id @default(autoincrement())
-  name             String
-  description      String
-  price            Float
-  numberOfLanudary Int
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  User             User[]
-}
-
 model Laundry {
   id        Int        @id @default(autoincrement())
   name      String

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { validationResult } from "express-validator";
 import { BadRequest } from "http-errors";
-import laundryService from '../../services/laundry/laundryService';
+import laundryService from '../../services/ownerLanudry/laundryService';
 
 
 class LaundryController {
@@ -20,15 +20,7 @@ class LaundryController {
             next(error)
         }
     }
-    public async getAllLaundry(req: Request, res: Response, next: NextFunction) {
-        try {
-            const  data = req.query;
-            const laundry = await laundryService.getAllLaundry(data);
-            res.status(200).json(laundry);
-        } catch (error) {            
-            next(error)
-        }
-    }
+ 
   
 }
 

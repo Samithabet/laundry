@@ -1,19 +1,19 @@
 import express from 'express';
 import genericService from '../../services/genericService';
 import genericController from '../../controllers/genericController';
-import { createClothesValidations,updateClothesValidations } from '../../validations/systemInitialization/clothesValidation';
+import { createServiceTypeValidations,updateServiceTypeValidations } from '../../validations/systemInitialization/serviceTypeValidation';
 import isAuthenticated from '../../middlewares/isAuthenticated';
 import { hasPermission } from '../../middlewares/hasPermission';
 import{RoleName} from '../../enum/role'
 import prisma from '../../conf/db';
-const clothesRoutr=express.Router();
-const clothesService=new genericService(prisma.serviceType)
-const clothesController=new genericController(clothesService)
+const serviceTypeRoutr=express.Router();
+const serviceTypeService=new genericService(prisma.serviceType)
+const serviceTypeController=new genericController(serviceTypeService)
 
-clothesRoutr.get('/',isAuthenticated,hasPermission([RoleName.ADMIN]),(clothesController.getAll.bind(clothesController)))
-clothesRoutr.get('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),clothesController.getById.bind(clothesController))
-clothesRoutr.post('/',isAuthenticated,hasPermission([RoleName.ADMIN]),createClothesValidations,clothesController.create.bind(clothesController))
-clothesRoutr.patch('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),updateClothesValidations,clothesController.update.bind(clothesController))
-clothesRoutr.delete('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),clothesController.delete.bind(clothesController))
+serviceTypeRoutr.get('/',isAuthenticated,hasPermission([RoleName.ADMIN]),(serviceTypeController.getAll.bind(serviceTypeController)))
+serviceTypeRoutr.get('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),serviceTypeController.getById.bind(serviceTypeController))
+serviceTypeRoutr.post('/',isAuthenticated,hasPermission([RoleName.ADMIN]),createServiceTypeValidations,serviceTypeController.create.bind(serviceTypeController))
+serviceTypeRoutr.patch('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),updateServiceTypeValidations,serviceTypeController.update.bind(serviceTypeController))
+serviceTypeRoutr.delete('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),serviceTypeController.delete.bind(serviceTypeController))
 
-export default clothesRoutr
+export default serviceTypeRoutr

@@ -1,67 +1,12 @@
 import { User } from "@prisma/client";
 import { HttpError, Conflict,NotFound,BadRequest,InternalServerError } from "http-errors";
-import { comparePassword, generateToken, generateTokenForLaundry, hashPassword } from "../../conf/generateToken";
+import { comparePassword, generateToken, hashPassword } from "../../conf/generateToken";
 import prisma from "../../conf/db";
 import { UserToken } from "../../types/userToken";
+import convertTopLevelStringBooleans from "../../utility/convertTopLevelStringBooleans";
+import { RoleName } from "../../enum/role";
  class AuthService {
-  public async Register(userLogin:UserToken,Data:User): Promise<any | undefined> {
-    // Implement user registration logic
-    try {
-      const user= await prisma.user.findFirst({
-        where: { email: userLogin.email },include:{role:true}
-      });
-      if (!user) {
-        throw new BadRequest("هذ المستخدم غير مو جود اعد تسجيل الدخول");
-      }
-        const userName = await prisma.user.findFirst({
-          where: { userName: Data.userName },
-        });
-        console.log("🚀 ~ AuthService ~ Register ~ userName:", userName)
-        if (userName) {
-          throw new Conflict("اسم المستخدم هذا موجود من قبل");
-        }
-        const hashedPassword = await hashPassword(Data.passWord);
-        const userRegister = await prisma.user.create({
-          data: { ...Data, passWord: hashedPassword, },
-        });
-        const { passWord, ...userWithoutPassword } = userRegister;
-        return{
-          ...userWithoutPassword
-        };
-        
- 
-    } catch (error) {
-      if (error instanceof Conflict) {
-        throw new Conflict(error.message);
-      } else {
-        throw new HttpError("خطاء في تسجيل المستخدم");
-      }
-    }
-  }
-  public async RegisterLaundry(id:number): Promise<any | undefined> {
-    // Implement user registration logic
-    try {
-      const laundry= await prisma.laundry.findFirst({
-        where: { id: id },
-      });
-      if (!laundry) {
-        throw new BadRequest("هذي المغسلة غير موجوده");
-      }
-     
-    const laundryToken=generateTokenForLaundry(laundry);
-    return{
-      laundryToken
-    }
-        
- 
-    } catch (error) {
-      if (error instanceof Conflict) {
-        throw new Conflict(error.message);
-      } else {
-        throw new HttpError("خطاء في تسجيل المستخدم");
-      }
-    }
-  }
+
   public async Login(userName: string, password: string): Promise<{ user: string; token: string }> {
     try {
       const user = await prisma.user.findFirst({ where: { userName: userName,isDeleted:false } });
@@ -94,5 +39,150 @@ import { UserToken } from "../../types/userToken";
     }
     
   }
+  public async getAllEmployees(userForLogin:User,filterData: any) {
+    console.log("🚀 ~ AuthService ~ getAllEmployees ~ userForLogin:", userForLogin)
+    try {
+const role=await prisma.role.findUnique({where:{id:userForLogin.roleId}});
+if(!role) throw new NotFound("يجب عليك تسجيل الدخول");
+if(role.name===RoleName.ADMIN){
+  
+
+      const { page, pageSize } = filterData;
+      let { include } = filterData;
+      delete filterData.page;
+      delete filterData.pageSize;
+      delete filterData.include;
+      if (include) {
+         include = convertTopLevelStringBooleans(include)
+      } else {
+        include = {}
+      }
+
+      if (page && pageSize) {
+        const skip = (+page - 1) * +pageSize;
+        const take = +pageSize;
+
+        const userAll = await prisma.laundry.findMany({
+          where: {...filterData,ownerId:userForLogin.id},
+          take: +take,
+          skip: +skip,
+         select:{
+          id:true,
+          name:true,
+          User:{
+            select: {
+              userName: true,
+              email: true,
+              phoen: true,
+            },
+          }
+         }
+        });
+
+        const total = await prisma.laundry.count({
+          where: {...filterData,ownerId:userForLogin.id},
+        });
+        return {
+          info: userAll,
+          total,
+          page,
+          pageSize,
+        };
+      }
+
+      return await prisma.laundry.findMany({
+        where: {...filterData,ownerId:userForLogin.id},
+       select:{
+        id:true,
+        name:true,
+        User:{
+          select: {
+            userName: true,
+            email: true,
+            phoen: true,
+          },
+        }
+       }
+      });
+    }else{
+      const { page, pageSize } = filterData;
+      let { include } = filterData;
+      delete filterData.page;
+      delete filterData.pageSize;
+      delete filterData.include;
+      if (include) {
+         include = convertTopLevelStringBooleans(include)
+      } else {
+        include = {}
+      }
+
+      if (page && pageSize) {
+        const skip = (+page - 1) * +pageSize;
+        const take = +pageSize;
+
+        const userAll = await prisma.user.findMany({
+          where: {...filterData,ownerId:userForLogin.id},
+          take: +take,
+          skip: +skip,
+          select:{
+            id:true,
+            userName:true,
+            email:true,
+            phoen:true,
+            address:true,
+            role:{
+              select: {
+                name: true,
+              }
+            },
+            laundry:{
+              select: {
+                name: true,
+              },
+            }
+           
+            }
+        });
+
+        const total = await prisma.user.count({
+          where:filterData,
+        });
+        return {
+          info: userAll,
+          total,
+          page,
+          pageSize,
+        };
+      }
+
+      return await prisma.user.findMany({
+        where: filterData,
+       select:{
+       id:true,
+       userName:true,
+       email:true,
+       phoen:true,
+       address:true,
+       role:{
+         select: {
+           name: true,
+         }
+       },
+       laundry:{
+         select: {
+           name: true,
+         },
+       }
+
+      
+       }
+      });
+    }
+    }
+   catch (error) {
+    throw new InternalServerError("خطاء في الخادم");
+      
+  }
+}
 }
 export default new AuthService();

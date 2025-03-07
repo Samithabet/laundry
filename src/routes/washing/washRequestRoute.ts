@@ -8,7 +8,7 @@ const washRequest=express.Router();
 
 
 
-washRequest.get('/',(washRequestController.washReques))
+washRequest.post('/',(washRequestController.washReques))
 
 
 export default washRequest

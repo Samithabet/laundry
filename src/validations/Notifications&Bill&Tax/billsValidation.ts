@@ -1,5 +1,7 @@
 import { body } from 'express-validator';
-const allowedFields = ['tax', 'isDeleted'];
+import { BadRequest } from 'http-errors';
+import prisma from '../../conf/db';
+const allowedFields = ['customerId', , 'isDeleted'];
 const checkForExtraFields = (req: any, res: any, next: any) => {
     const bodyFields = Object.keys(req.body);
   
@@ -16,29 +18,36 @@ const checkForExtraFields = (req: any, res: any, next: any) => {
   
     next();
   };
-
-export const createTaxValidations = [
-    // tax validation
-    body('tax')
-        .notEmpty().withMessage('قيمة yax مطلوبة')
-        .isFloat({ min: 0 }).withMessage('يجب أن تكون قيمة tax رقمًا موجبًا'),
-
-    // isDeleted validation (optional)
-    body('isDeleted')
-        .optional()
-        .isBoolean().withMessage('يجب أن تكون قيمة isDeleted منطقية (true/false)'),
-    checkForExtraFields
-];
-
-export const updateTaxValidations = [
-    // tax validation (optional)
-    body('tax')
-        .optional()
-        .isFloat({ min: 0 }).withMessage('يجب أن تكون قيمة tax رقمًا موجبًا'),
+export const createBillValidations = [
+    // customerId validation
+    body('customerId')
+        .notEmpty().withMessage('customerId مطلوب')
+        .isInt({ min: 1 }).withMessage('يجب أن تكون قيمة customerId رقمًا صحيحًا موجبًا')
+.custom(async (value) => {
+    const customer = await prisma.customer.findUnique({ where: { id: value } });
+    if (!customer) {
+        throw new BadRequest("هذا العميل غير موجود");
+    }
+}),
+    
+   
 
     // isDeleted validation (optional)
     body('isDeleted')
         .optional()
         .isBoolean().withMessage('يجب أن تكون قيمة isDeleted منطقية (true/false)'),
-    checkForExtraFields
+]
+export const updateBillValidations = [
+    // customerId validation (optional)
+    body('customerId')
+        .optional()
+        .isInt({ min: 1 }).withMessage('يجب أن تكون قيمة customerId رقمًا صحيحًا موجبًا'),
+
+
+    
+
+    // isDeleted validation (optional)
+    body('isDeleted')
+        .optional()
+        .isBoolean().withMessage('يجب أن تكون قيمة isDeleted منطقية (true/false)'),
 ];

@@ -6,14 +6,14 @@ import isAuthenticated from '../../middlewares/isAuthenticated';
 import { hasPermission } from '../../middlewares/hasPermission';
 import{RoleName} from '../../enum/role'
 import prisma from '../../conf/db';
-const clothesRoutr=express.Router();
-const clothesService=new genericService(prisma.service)
-const clothesController=new genericController(clothesService)
+const serviceRoute=express.Router();
+const serviceService=new genericService(prisma.service)
+const serviceController=new genericController(serviceService)
 
-clothesRoutr.get('/',isAuthenticated,hasPermission([RoleName.ADMIN]),(clothesController.getAll.bind(clothesController)))
-clothesRoutr.get('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),clothesController.getById.bind(clothesController))
-clothesRoutr.post('/',isAuthenticated,hasPermission([RoleName.ADMIN]),createServiceValidations,clothesController.create.bind(clothesController))
-clothesRoutr.patch('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),updateServiceValidations,clothesController.update.bind(clothesController))
-clothesRoutr.delete('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),clothesController.delete.bind(clothesController))
+serviceRoute.get('/',isAuthenticated,hasPermission([RoleName.ADMIN]),(serviceController.getAll.bind(serviceController)))
+serviceRoute.get('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),serviceController.getById.bind(serviceController))
+serviceRoute.post('/',isAuthenticated,hasPermission([RoleName.ADMIN]),createServiceValidations,serviceController.create.bind(serviceController))
+serviceRoute.patch('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),updateServiceValidations,serviceController.update.bind(serviceController))
+serviceRoute.delete('/:id',isAuthenticated,hasPermission([RoleName.ADMIN]),serviceController.delete.bind(serviceController))
 
-export default clothesRoutr
+export default serviceRoute

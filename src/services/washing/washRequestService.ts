@@ -24,7 +24,9 @@ class washRequestService {
           });
       }
    
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
   private async totalWithoutTax(
     arr: { clothesId: number; serviceTypeId: number; quantity: number }[]

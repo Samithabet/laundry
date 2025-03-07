@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "OrderStatus" AS ENUM ('PENDING', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED');
+
+-- CreateEnum
 CREATE TYPE "WashingStatus" AS ENUM ('DOEN', 'PROCESSING');
 
 -- CreateEnum
@@ -15,7 +18,6 @@ CREATE TABLE "User" (
     "address" TEXT NOT NULL,
     "roleId" INTEGER NOT NULL,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
-    "packageId" INTEGER,
     "laundryId" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -32,19 +34,6 @@ CREATE TABLE "Role" (
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Role_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Package" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "price" DOUBLE PRECISION NOT NULL,
-    "numberOfLanudary" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Package_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -111,14 +100,14 @@ CREATE TABLE "Customer" (
 );
 
 -- CreateTable
-CREATE TABLE "Scot" (
+CREATE TABLE "Tax" (
     "id" SERIAL NOT NULL,
     "scot" DOUBLE PRECISION NOT NULL,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Scot_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Tax_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -158,6 +147,17 @@ CREATE TABLE "WashingService" (
     CONSTRAINT "WashingService_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Order" (
+    "id" SERIAL NOT NULL,
+    "problemName" TEXT NOT NULL,
+    "lanudryId" INTEGER NOT NULL,
+    "state" INTEGER NOT NULL,
+    "orderStatus" "OrderStatus" NOT NULL,
+
+    CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -169,9 +169,6 @@ CREATE UNIQUE INDEX "Bills_washingId_key" ON "Bills"("washingId");
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_packageId_fkey" FOREIGN KEY ("packageId") REFERENCES "Package"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_laundryId_fkey" FOREIGN KEY ("laundryId") REFERENCES "Laundry"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -199,3 +196,6 @@ ALTER TABLE "WashingService" ADD CONSTRAINT "WashingService_serviceId_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "WashingService" ADD CONSTRAINT "WashingService_washingId_fkey" FOREIGN KEY ("washingId") REFERENCES "Washing"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Order" ADD CONSTRAINT "Order_lanudryId_fkey" FOREIGN KEY ("lanudryId") REFERENCES "Laundry"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
