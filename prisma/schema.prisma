@@ -165,3 +165,168 @@ enum RoleName {
   USPER_ADMIN
   EMPLOY
 }
+
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "mysql" // Change provider to MySQL
+//   url      = env("DATABASE_URL") // Ensure your DATABASE_URL is configured for MySQL
+// }
+
+// model User {
+//   id           Int       @id @default(autoincrement())
+//   email        String    @unique
+//   userName     String    @unique
+//   passWord     String
+//   name         String
+//   phoen        String
+//   address      String
+//   roleId       Int
+//   isDeleted    Boolean   @default(false)
+//   laundryId    Int?
+//   createdAt    DateTime  @default(now())
+//   updatedAt    DateTime  @updatedAt
+//   role         Role      @relation(fields: [roleId], references: [id])
+//   laundry      Laundry?  @relation("employ", fields: [laundryId], references: [id])
+//   ownerlaundry Laundry[] @relation("owner")
+// }
+
+// model Role {
+//   id        Int      @id @default(autoincrement())
+//   name      RoleName
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   isDeleted Boolean  @default(false)
+//   User      User[]
+// }
+
+// model Laundry {
+//   id        Int        @id @default(autoincrement())
+//   name      String
+//   createdAt DateTime   @default(now())
+//   updatedAt DateTime   @updatedAt
+//   ownerId   Int
+//   isDeleted Boolean    @default(false)
+//   Customer  Customer[]
+//   owner     User       @relation("owner", fields: [ownerId], references: [id])
+//   User      User[]     @relation("employ")
+//   Order     Order[]
+// }
+
+// model Clothes {
+//   id        Int       @id @default(autoincrement())
+//   laundryId Int
+//   name      String
+//   isDeleted Boolean   @default(false)
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime  @updatedAt
+//   Service   Service[]
+// }
+
+// model Service {
+//   id             Int              @id @default(autoincrement())
+//   clothesId      Int
+//   serviceTypeId  Int
+//   isDeleted      Boolean          @default(false)
+//   createdAt      DateTime         @default(now())
+//   updatedAt      DateTime         @updatedAt
+//   clothes        Clothes          @relation(fields: [clothesId], references: [id])
+//   serviceType    ServiceType      @relation(fields: [serviceTypeId], references: [id])
+//   cost           Float
+//   WashingService WashingService[]
+// }
+
+// model ServiceType {
+//   id        Int       @id @default(autoincrement())
+//   laundryId Int
+//   name      String
+//   isDeleted Boolean   @default(false)
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime  @updatedAt
+//   Service   Service[]
+// }
+
+// model Customer {
+//   id           Int      @id @default(autoincrement())
+//   name         String
+//   customerCode String
+//   phoen        String
+//   laundryId    Int
+//   isDeleted    Boolean  @default(false)
+//   createdAt    DateTime @default(now())
+//   updatedAt    DateTime @updatedAt
+//   laundry      Laundry  @relation(fields: [laundryId], references: [id])
+//   Bills        Bills[]
+// }
+
+// model Tax {
+//   id        Int      @id @default(autoincrement())
+//   scot      Float
+//   isDeleted Boolean  @default(false)
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model Bills {
+//   id         Int      @id @default(autoincrement())
+//   customerId Int
+//   washingId  Int      @unique
+//   total      Float
+//   isDeleted  Boolean  @default(false)
+//   createdAt  DateTime @default(now())
+//   updatedAt  DateTime @updatedAt
+//   customer   Customer @relation(fields: [customerId], references: [id])
+//   washing    Washing  @relation(fields: [washingId], references: [id])
+// }
+
+// model Washing {
+//   id                Int              @id @default(autoincrement())
+//   customerId        Int
+//   status            WashingStatus
+//   totalWithoutTax   Float
+//   totalIncludingTax Float
+//   isDeleted         Boolean          @default(false)
+//   createdAt         DateTime         @default(now())
+//   updatedAt         DateTime         @updatedAt
+//   Bills             Bills?
+//   WashingService    WashingService[]
+// }
+
+// model WashingService {
+//   id        Int     @id @default(autoincrement())
+//   serviceId Int
+//   washingId Int
+//   isDeleted Boolean @default(false)
+//   service   Service @relation(fields: [serviceId], references: [id])
+//   washing   Washing @relation(fields: [washingId], references: [id])
+// }
+
+// model Order {
+//   id          Int      @id @default(autoincrement())
+//   problemName String   
+//   lanudryId   Int
+//   state       Int
+//   orderStatus OrderStatus 
+//   laundry     Laundry  @relation(fields: [lanudryId], references: [id])
+// }
+
+// enum OrderStatus {
+//   PENDING    // قيد الانتظار
+//   IN_PROGRESS // قيد التنفيذ
+//   COMPLETED  // مكتمل
+//   CANCELLED  // ملغى
+// }
+
+// enum WashingStatus {
+//   DOEN
+//   PROCESSING
+// }
+
+// enum RoleName {
+//   ADMIN
+//   USPER_ADMIN
+//   EMPLOY
+// }

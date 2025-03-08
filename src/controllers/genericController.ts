@@ -41,12 +41,13 @@ class GenericController<T> {
     public async create(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
 
-            const data = req.body; // Extract data from request body
-            console.log("🚀 ~ GenericController<T> ~ create ~ data:", data)
+           
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 throw new BadRequest(errors.array()[0].msg);
             }
+            const data = req.body; // Extract data from request body
+            console.log("🚀 ~ GenericController<T> ~ create ~ data:", data)
             const result = await this.service.create(data);
             res.status(201).json(result);
         } catch (error) {

@@ -4,11 +4,14 @@ class WashRequestController{
     public async washReques(req:Request,res:Response,next:NextFunction){
        try {
         const data=req.body
-        const washRequest= washRequestService.washReques(data)
-        return washRequest
+        const washRequest=await washRequestService.washReques(data)
+        console.log("🚀 ~ WashRequestController ~ washReques ~ washRequest:", washRequest)
+        res.status(200).json(washRequest);
         
         
        } catch (error) {
+        console.log("rffffff",error);
+        
         next(error)
        }
 

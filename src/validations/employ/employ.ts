@@ -29,19 +29,12 @@ export const createEmployValidations = [
 
   // Password validation
   body('passWord')
-    .notEmpty().withMessage('كلمة المرور مطلوبة') // Password is required
-    .isLength({ min: 6 }).withMessage('يجب أن تكون كلمة المرور على الأقل 6 أحرف') // Password must be at least 6 characters
-.custom(async (value: string,{req}: any) => {
-  const role = await prisma.role.findFirst({ where: { name: RoleName.EMPLOY } });
-  if(!role){
-    throw new BadRequest("خطاء في الصلاحية");
-  }
-  req.body={
-    ...req.body,
-    roleId:role?.id,
-    passWord:await hashPassword(value)
-  }
-}),
+  .notEmpty().withMessage('كلمة المرور مطلوبة') // Password is required
+  .isLength({ min: 6 }).withMessage('يجب أن تكون كلمة المرور على الأقل 6 أحرف') // Password must be at least 6 characters
+ 
+
+   
+  ,
   // Name validation
   body('name')
     .notEmpty().withMessage('الاسم مطلوب'), // Name is required

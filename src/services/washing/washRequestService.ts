@@ -1,31 +1,37 @@
 import prisma from "../../conf/db";
-import { BadRequest } from "http-errors";
+import { BadRequest, InternalServerError } from "http-errors";
 import { WashingStatus } from "../../enum/washingStatus";
 class washRequestService {
-  public async washReques(data: any) {
+  public async washReques(data: any): Promise<any> {
     try {
       const totalWash = await this.totalWithoutTax(data.wash);
       const totalWashWithTax = await this.totalIncludingTax(totalWash);
       const washing = await prisma.washing.create({
         data: {
           customerId: data.customerId,
-          totalIncludingTax: totalWashWithTax,
-          totalWithoutTax: totalWash,
+          totalIncludingTax: totalWash,
+          totalWithoutTax: totalWashWithTax,
           status: WashingStatus.PROCESSING,
         },
       });
       if(washing){
-        await prisma.bills.create({
+       const bill= await prisma.bills.create({
             data: {
               customerId: data.customerId,
               washingId:washing.id,
               total: totalWash,
             },
           });
+       console.log("🚀 ~ washRequestService ~ washReques ~ bill:", bill)
+       return bill
       }
+     
    
     } catch (error) {
-      throw error;
+      if (error instanceof BadRequest) {
+        throw error;
+      }
+      throw new InternalServerError("خطاء في الخادم");
     }
   }
   private async totalWithoutTax(
@@ -47,12 +53,16 @@ class washRequestService {
     return total;
   }
   private async totalIncludingTax(total: number): Promise<number> {
+    
+  
     const costTax = await prisma.tax.findFirst();
     if (!costTax) {
       throw new BadRequest("ايجب اظافة ضريبه في التهيئة النظام");
     }
     const Tax = costTax?.scot / 100;
     return total + Tax * 100;
+    
+ 
   }
 }
 export default new washRequestService();

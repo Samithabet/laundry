@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-const allowedFields = ['tax', 'isDeleted'];
+const allowedFields = ['scot', 'isDeleted'];
 const checkForExtraFields = (req: any, res: any, next: any) => {
     const bodyFields = Object.keys(req.body);
   
@@ -19,7 +19,7 @@ const checkForExtraFields = (req: any, res: any, next: any) => {
 
 export const createTaxValidations = [
     // tax validation
-    body('tax')
+    body('scot')
         .notEmpty().withMessage('قيمة yax مطلوبة')
         .isFloat({ min: 0 }).withMessage('يجب أن تكون قيمة tax رقمًا موجبًا'),
 
@@ -32,7 +32,7 @@ export const createTaxValidations = [
 
 export const updateTaxValidations = [
     // tax validation (optional)
-    body('tax')
+    body('scot')
         .optional()
         .isFloat({ min: 0 }).withMessage('يجب أن تكون قيمة tax رقمًا موجبًا'),
 

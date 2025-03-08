@@ -1,7 +1,7 @@
 import { body } from 'express-validator';
 import { BadRequest } from 'http-errors';
 import prisma from '../../conf/db'; // Adjust the import path as needed
-const allowedFields = ['name', 'customerCode', 'isDeleted', 'phone','laundryId' ];
+const allowedFields = ['name', 'customerCode', 'isDeleted', 'phoen','laundryId' ];
 const checkForExtraFields = (req: any, res: any, next: any) => {
     const bodyFields = Object.keys(req.body);
   
@@ -51,7 +51,7 @@ export const createCustomerValidations = [
         }),
 
     // phone validation
-    body('phone')
+    body('phoen')
         .notEmpty().withMessage('رقم الهاتف مطلوب')
         .isMobilePhone('any').withMessage('رقم الهاتف غير صحيح'),
 

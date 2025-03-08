@@ -28,6 +28,7 @@ export const createBillValidations = [
     if (!customer) {
         throw new BadRequest("هذا العميل غير موجود");
     }
+   
 }),
     
    
@@ -36,6 +37,7 @@ export const createBillValidations = [
     body('isDeleted')
         .optional()
         .isBoolean().withMessage('يجب أن تكون قيمة isDeleted منطقية (true/false)'),
+        checkForExtraFields
 ]
 export const updateBillValidations = [
     // customerId validation (optional)
@@ -50,4 +52,6 @@ export const updateBillValidations = [
     body('isDeleted')
         .optional()
         .isBoolean().withMessage('يجب أن تكون قيمة isDeleted منطقية (true/false)'),
+        checkForExtraFields
+
 ];
